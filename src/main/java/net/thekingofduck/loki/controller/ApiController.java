@@ -6,9 +6,9 @@ import net.thekingofduck.loki.entity.HttpLogEntity;
 import net.thekingofduck.loki.mapper.HttpLogMapper;
 import net.thekingofduck.loki.model.ResultViewModelUtil;
 import net.thekingofduck.loki.service.AuthService;
-import org.apache.catalina.connector.Connector;
+//import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+//import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,12 +39,12 @@ public class ApiController {
     @Autowired
     HttpLogMapper httpLogMapper;
 
-    @Autowired
-    TomcatServletWebServerFactory tomcatServletWebServerFactory;
+  //  @Autowired
+   // TomcatServletWebServerFactory tomcatServletWebServerFactory;
 
 
 
-    @RequestMapping(value="port/manage")
+  /*  @RequestMapping(value="port/manage")
     public Object getPortManage(HttpServletRequest request){
         if (new AuthService().check(request)) {
             List<Connector> connectorList = tomcatServletWebServerFactory.getAdditionalTomcatConnectors();
@@ -58,7 +58,7 @@ public class ApiController {
             ModelAndView modelAndView= new ModelAndView("default/index");
             return modelAndView;
         }
-    }
+    }*/
 
 
     @RequestMapping(value="httplog/get", produces="application/json;charset=UTF-8")
