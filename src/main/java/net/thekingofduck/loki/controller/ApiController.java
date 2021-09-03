@@ -6,7 +6,9 @@ import net.thekingofduck.loki.entity.HttpLogEntity;
 import net.thekingofduck.loki.mapper.HttpLogMapper;
 import net.thekingofduck.loki.model.ResultViewModelUtil;
 import net.thekingofduck.loki.service.AuthService;
+import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Project: loki
@@ -34,6 +38,28 @@ public class ApiController {
     @SuppressWarnings("all")
     @Autowired
     HttpLogMapper httpLogMapper;
+
+    @Autowired
+    TomcatServletWebServerFactory tomcatServletWebServerFactory;
+
+
+
+    @RequestMapping(value="port/manage")
+    public Object getPortManage(HttpServletRequest request){
+        if (new AuthService().check(request)) {
+            List<Connector> connectorList = tomcatServletWebServerFactory.getAdditionalTomcatConnectors();
+            for (int i = 0; i < connectorList.size(); i++) {
+                Connector connector = connectorList.get(i);
+                log.info("{} {} {}", connector.getExecutorName(), connector.getPort(), connector.getState());
+            }
+            Map<String, List<Connector>> map = connectorList.stream().collect(Collectors.groupingBy(Connector::getStateName));
+            return map;
+        }else{
+            ModelAndView modelAndView= new ModelAndView("default/index");
+            return modelAndView;
+        }
+    }
+
 
     @RequestMapping(value="httplog/get", produces="application/json;charset=UTF-8")
     public Object getHttpLog(@RequestParam(value = "page",required = false,defaultValue = "1") int page,

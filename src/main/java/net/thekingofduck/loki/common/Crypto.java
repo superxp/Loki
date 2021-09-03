@@ -5,10 +5,11 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.SecureRandom;
 
+import cn.hutool.core.codec.Base64Decoder;
+import cn.hutool.core.codec.Base64Encoder;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+
 
 
 /**
@@ -55,7 +56,7 @@ public class Crypto {
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, secKey);
 
-        String cryptStr = new BASE64Encoder().encode(cipher.doFinal(plainText.getBytes()));
+        String cryptStr = new Base64Encoder().encode(cipher.doFinal(plainText.getBytes()));
 
         //log.info("Encrypted: " + cryptStr);
 
@@ -69,7 +70,7 @@ public class Crypto {
 
         //log.info(String.format("Decrypt: %s\t%s",cipherStr,key));
 
-        byte[] cipherBytes = new BASE64Decoder().decodeBuffer(cipherStr);
+        byte[] cipherBytes = Base64Decoder.decode(cipherStr);
 
         SecretKey secKey = generateKey(key.getBytes());
         Cipher cipher = Cipher.getInstance("AES");

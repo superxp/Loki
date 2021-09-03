@@ -58,21 +58,27 @@ public class MultiPorts {
                 String endport = port.split("-")[1];
                 for (int iport = Integer.parseInt(startport); iport < Integer.parseInt(endport) + 1; iport++) {
                     //System.out.println(iport);
+
                     try {
                         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
                         connector.setScheme(scheme);
                         connector.setPort(Integer.parseInt(String.valueOf(iport)));
                         result.add(connector);
                     }catch (Exception e){
-                        log.error(e.toString());
+                        log.error(e.toString()+":"+port);
                     }
                 }
 
             }else {
-                Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-                connector.setScheme(scheme);
-                connector.setPort(Integer.parseInt(port));
-                result.add(connector);
+                try {
+                    Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+                    connector.setScheme(scheme);
+                    connector.setPort(Integer.parseInt(port));
+                    result.add(connector);
+                }catch (Exception e){
+                    log.error(e.toString()+":"+port);
+                }
+
             }
 
         }
